@@ -1,11 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
 
 # Create your views here.
 def index(request):
-    return HttpResponse('Hehe')
+    return render(request, 'dashboard/index.html')
 
 
 def staff(request):
-    return HttpResponse('XD')
+    return render(request, 'dashboard/staff.html')
