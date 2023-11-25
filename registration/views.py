@@ -23,3 +23,7 @@ def login(request):
 
 def logout(request):
     return render(request, 'registration/logout.html')
+
+
+def profile(request):
+    return render(request, 'registration/profile.html')
