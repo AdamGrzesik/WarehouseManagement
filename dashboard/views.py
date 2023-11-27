@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product
+from .models import Product, Order
 from .forms import ProductForm
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -12,7 +13,20 @@ def index(request):
 
 @login_required
 def staff(request):
-    return render(request, 'dashboard/staff.html')
+    employees = User.objects.all()
+    context = {
+        'employees': employees,
+    }
+    return render(request, 'dashboard/staff.html', context)
+
+
+@login_required
+def staff_view(request, primary_key):
+    employee = User.objects.get(pk=primary_key)
+    context = {
+        'employee': employee,
+    }
+    return render(request, 'dashboard/staff_view.html', context)
 
 
 @login_required
@@ -63,4 +77,8 @@ def product_update(request, primary_key):
 
 @login_required
 def order(request):
-    return render(request, 'dashboard/order.html')
+    orders = Order.objects.all()
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'dashboard/order.html', context)
