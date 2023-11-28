@@ -21,25 +21,25 @@
                                 <tbody>
                                 <tr>
                                     <th scope="row">Name</th>
-                                    <td>{{ user.username }}</td>
+                                    <td>{{ employee.username }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Email</th>
-                                    <td>{{ user.email }}</td>
+                                    <td>{{ employee.email }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Phone</th>
-                                    <td>{{ user.profile.phone }}</td>
+                                    <td>{{ employee.profile.phone }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Address</th>
-                                    <td>{{ user.profile.address }}</td>
+                                    <td>{{ employee.profile.address }}</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="col-md-4">
-                            <img class="img-thumbnail" src="{{ user.profile.image.url }}" alt="Default Image"
+                            <img class="img-thumbnail" src="{{ employee.profile.image.url }}" alt="Default Image"
                                  onerror="this.onerror=null; this.src='/media/profile_pics/default.jpg'">
                         </div>
                     </div>

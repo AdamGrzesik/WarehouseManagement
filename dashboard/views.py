@@ -1,14 +1,29 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order
-from .forms import ProductForm
+from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 
 # Create your views here.
 @login_required
 def index(request):
-    return render(request, 'dashboard/index.html')
+    orders = Order.objects.all()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.staff = request.user
+            instance.save()
+            return redirect('dashboard-index')
+    else:
+        form = OrderForm()
+    context = {
+        'orders': orders,
+        'form': form,
+    }
+    return render(request, 'dashboard/index.html', context)
 
 
 @login_required
@@ -36,6 +51,8 @@ def product(request):
         form = ProductForm(request.POST)
         if form.is_valid():
             form.save()
+            product_name = form.cleaned_data.get('name')
+            messages.success(request, f'Product {product_name} has been added!')
             return redirect('dashboard-product')
     else:
         form = ProductForm()
