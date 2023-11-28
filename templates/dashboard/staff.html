@@ -5,36 +5,28 @@
 <!--Table-->
 <div class="container">
     <div class="row my-4">
-        <div class="col-md-4"></div>
+        <div class="col-md-2"></div>
         <div class="col-md-8">
             <table class="table bg-white">
                 <thead class="bg-dark">
                 <tr class="text-white">
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col"></th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
                 </tr>
                 </thead>
                 <tbody>
+                {% for employee in employees %}
+                {% if employee.is_staff %}
                 <tr>
-                    <th scope="row"><a class="btn btn-dark btn-sm" href="">View</a></th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row"><a class="btn btn-dark btn-sm" href="{% url 'dashboard-staff-view' employee.id %}">View</a></th>
+                    <td>{{ employee.first_name}} {{ employee.last_name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.profile.phone }}</td>
                 </tr>
-                <tr>
-                    <th scope="row"><a class="btn btn-dark btn-sm" href="">View</a></th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row"><a class="btn btn-dark btn-sm" href="">View</a></th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+                {% endif %}
+                {% endfor %}
                 </tbody>
             </table>
         </div>
