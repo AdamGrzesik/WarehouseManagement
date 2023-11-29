@@ -9,6 +9,12 @@ from django.contrib import messages
 # Create your views here.
 @login_required
 def index(request):
+    counts = {
+        'products_count': Product.objects.all().count(),
+        'orders_count': Order.objects.all().count(),
+        'employees_count': User.objects.filter(is_staff=True).count(),
+    }
+
     orders = Order.objects.all()
     products = Product.objects.all()
     if request.method == 'POST':
@@ -25,14 +31,16 @@ def index(request):
         'products': products,
         'form': form,
     }
-    return render(request, 'dashboard/index.html', context)
+    return render(request, 'dashboard/index.html', context | counts)
 
 
 @login_required
 def staff(request):
     employees = User.objects.all()
+    employees_count = employees.count()
     context = {
         'employees': employees,
+        'employees_count': employees_count,
     }
     return render(request, 'dashboard/staff.html', context)
 
