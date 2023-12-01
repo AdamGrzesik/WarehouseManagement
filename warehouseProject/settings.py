@@ -58,11 +58,7 @@ MIDDLEWARE = [
 ]
 
 # Static files handling for web deployment
-STORAGES = {
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 ROOT_URLCONF = 'warehouseProject.urls'
 
