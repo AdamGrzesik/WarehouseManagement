@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Product, Order
+from .models import Product, Order, Message
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -30,6 +30,7 @@ def index(request):
         'orders': orders,
         'products': products,
         'form': form,
+        'message': Message.load().text,
     }
     return render(request, 'dashboard/index.html', context | counts)
 
