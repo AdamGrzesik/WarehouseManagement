@@ -31,7 +31,7 @@ class Order(models.Model):
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.product}, requested by {self.staff}'
+        return f'{self.product.name}, requested by {self.staff} in the amount of {self.quantity}'
 
 
 class SingletonModel(models.Model):
