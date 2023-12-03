@@ -108,8 +108,18 @@ def product_update(request, primary_key):
 @login_required
 def order(request):
     orders = Order.objects.all()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.staff = request.user
+            instance.save()
+            return redirect('dashboard-order')
+    else:
+        form = OrderForm()
     context = {
         'orders': orders,
+        'form': form,
     }
     return render(request, 'dashboard/order.html', context)
 
