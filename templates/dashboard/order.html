@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row my-4">
         <div class="col-md-12">
-            <div class="col-md-12">
+            <div class="col-md-10">
                 <table class="table bg-white">
                     <thead class="bg-dark">
                     <tr class="text-white">
@@ -29,6 +29,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <a class="btn btn-primary" href="{% url 'export-orders-to-csv' %}">Export to CSV</a>
             </div>
         </div>
     </div>
