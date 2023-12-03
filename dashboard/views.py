@@ -1,9 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order, Message
 from .forms import ProductForm, OrderForm
 from django.contrib.auth.models import User
 from django.contrib import messages
+import csv
 
 
 # Create your views here.
@@ -106,7 +108,54 @@ def product_update(request, primary_key):
 @login_required
 def order(request):
     orders = Order.objects.all()
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.staff = request.user
+            instance.save()
+            return redirect('dashboard-order')
+    else:
+        form = OrderForm()
     context = {
         'orders': orders,
+        'form': form,
     }
     return render(request, 'dashboard/order.html', context)
+
+
+# CSV export
+@login_required
+def export_orders_to_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="orders.csv"'
+
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(['Product', 'Category', 'Quantity', 'Order by', 'Date'])
+
+    if request.user.is_staff:
+        orders = Order.objects.all().values_list('product__name', 'product__category', 'quantity', 'staff__first_name',
+                                                 'staff__last_name', 'date')
+    else:
+        orders = Order.objects.filter(staff=request.user).values_list('product__name', 'product__category', 'quantity',
+                                                                      'staff__first_name', 'staff__last_name', 'date')
+    for record in orders:
+        order_by = ' '.join(record[3:5])
+        record = record[:3] + (order_by,) + record[5:]
+        writer.writerow(record)
+    return response
+
+
+@login_required
+def export_products_to_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="products.csv"'
+
+    writer = csv.writer(response, delimiter=';')
+    writer.writerow(['Name', 'Category', 'Quantity'])
+
+    products = Product.objects.all().values_list('name', 'category', 'quantity')
+    for record in products:
+        writer.writerow(record)
+
+    return response
