@@ -12,6 +12,10 @@ CATEGORY = (
     ('Toys and Games', 'Toys and Games'),
     ('Miscellaneous', 'Miscellaneous'),
 )
+STATUS_CHOICES = (
+    ('Active', 'Active'),
+    ('Archived', 'Archived'),
+)
 
 
 # Create your models here.
@@ -29,6 +33,7 @@ class Order(models.Model):
     staff = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(null=True)
     date = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Active')
 
     def __str__(self):
         return f'{self.product.name}, requested by {self.staff} in the amount of {self.quantity}'

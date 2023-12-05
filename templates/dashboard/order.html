@@ -22,7 +22,7 @@
             </div>
         </div>
         <div class="col-md-9">
-            <div class="col-md-12">
+            <div class="col-md-14">
                 <table class="table bg-white">
                     <thead class="bg-dark">
                     <tr class="text-white">
@@ -31,17 +31,26 @@
                         <th scope="col">Quantity</th>
                         <th scope="col">Order by</th>
                         <th scope="col">Date</th>
+                        <th scope="col">Activity</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for order in orders %}
+                    {% if order.status == 'Active' %}
                     <tr>
                         <td>{{ order.product.name }}</td>
                         <td>{{ order.product.category }}</td>
                         <td>{{ order.quantity }}</td>
                         <td>{{ order.staff.first_name }} {{ orders.staff.last_name }}</td>
                         <td>{{ order.date }}</td>
+                        <td>
+                            <a href="{% url 'dashboard-order-update' order.id %}"
+                               class="btn btn-sm btn-primary">Edit</a>
+                            <a href="{% url 'dashboard-order-delete' order.id %}"
+                           class="btn btn-sm btn-danger">Delete</a>
+                        </td>
                     </tr>
+                    {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>

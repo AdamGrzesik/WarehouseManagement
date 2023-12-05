@@ -9,6 +9,8 @@ urlpatterns = [
     path('products/delete/<int:primary_key>/', views.product_delete, name='dashboard-product-delete'),
     path('products/edit/<int:primary_key>/', views.product_update, name='dashboard-product-update'),
     path('orders/', views.order, name='dashboard-order'),
+    path('orders/delete/<int:primary_key>/', views.order_delete, name='dashboard-order-delete'),
+    path('orders/edit/<int:primary_key>/', views.order_update, name='dashboard-order-update'),
     # CSV export
     path('orders/csv', views.export_orders_to_csv, name='export-orders-to-csv'),
     path('products/csv', views.export_products_to_csv, name='export-products-to-csv'),
