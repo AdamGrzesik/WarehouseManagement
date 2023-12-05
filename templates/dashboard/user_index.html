@@ -33,7 +33,7 @@
                         </thead>
                         <tbody>
                         {% for order in orders %}
-                        {% if order.staff == user %}
+                        {% if order.staff == user and order.status == 'Active' %}
                         <tr>
                             <td>{{ order.product.name }}</td>
                             <td>{{ order.product.category }}</td>

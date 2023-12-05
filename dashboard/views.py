@@ -1,8 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Product, Order, Message
-from .forms import ProductForm, OrderForm
+from .forms import ProductForm, OrderForm, OrderUpdateForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 import csv
@@ -124,6 +124,35 @@ def order(request):
     return render(request, 'dashboard/order.html', context)
 
 
+@login_required
+def order_update(request, primary_key):
+    order_to_update = Order.objects.get(pk=primary_key)
+    if request.method == 'POST':
+        form = OrderUpdateForm(request.POST, instance=order_to_update)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard-order')
+    else:
+        form = OrderUpdateForm(instance=order_to_update)
+    context = {
+        'order_to_update': order_to_update,
+        'form': form,
+    }
+    return render(request, 'dashboard/order_update.html', context)
+
+
+@login_required
+def order_delete(request, primary_key):
+    order_to_delete = Order.objects.get(pk=primary_key)
+    if request.method == 'POST':
+        order_to_delete.delete()
+        return redirect('dashboard-order')
+    context = {
+        'order_to_delete': order_to_delete,
+    }
+    return render(request, 'dashboard/order_delete.html', context)
+
+
 # CSV export
 @login_required
 def export_orders_to_csv(request):
@@ -134,11 +163,13 @@ def export_orders_to_csv(request):
     writer.writerow(['Product', 'Category', 'Quantity', 'Order by', 'Date'])
 
     if request.user.is_staff:
-        orders = Order.objects.all().values_list('product__name', 'product__category', 'quantity', 'staff__first_name',
-                                                 'staff__last_name', 'date')
+        orders = Order.objects.filter(status='Active').values_list('product__name', 'product__category', 'quantity',
+                                                                   'staff__first_name', 'staff__last_name', 'date')
     else:
-        orders = Order.objects.filter(staff=request.user).values_list('product__name', 'product__category', 'quantity',
-                                                                      'staff__first_name', 'staff__last_name', 'date')
+        orders = Order.objects.filter(staff=request.user, status='Active').values_list('product__name',
+                                                                                       'product__category', 'quantity',
+                                                                                       'staff__first_name',
+                                                                                       'staff__last_name', 'date')
     for record in orders:
         order_by = ' '.join(record[3:5])
         record = record[:3] + (order_by,) + record[5:]
