@@ -16,7 +16,7 @@ In main directory.
 
 Go to the project directory and run in the terminal:
 ```bash
-  pip install -r requirements.txt
+  python manage.py runserver
 ```
 ## Notice
 
